@@ -1,13 +1,16 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from 'react-router-dom';
+
+import Footer from '@/components/common/Footer';
+import Header from '@/components/common/Header';
 
 const Root = () => {
-    return (
-        <div>
-            <h1>Header</h1>
-            <Outlet />
-            <h1>Footer</h1>
-        </div>
-    )
-}
+  return (
+    <div className="dark">
+      <Header />
+      <Outlet />
+      <Footer />
+    </div>
+  );
+};
 
-export default Root
+export default Root;

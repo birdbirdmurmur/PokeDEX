@@ -1,10 +1,10 @@
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom';
 
-import Root from '@/routes/root'
-import About from '@/routes/About'
-import Pokedex from '@/routes/Pokedex'
+import Root from '@/routes/Root';
+import About from '@/routes/About';
+import Pokedex from '@/routes/Pokedex';
 
-import './globals.css'
+import './globals.css';
 
 const App = () => {
   return (
@@ -12,11 +12,11 @@ const App = () => {
       <Routes>
         <Route element={<Root />}>
           <Route index element={<Pokedex />} />
-          <Route path='/about' element={<About />} />
+          <Route path="/about" element={<About />} />
         </Route>
       </Routes>
     </main>
-  )
-}
+  );
+};
 
-export default App
+export default App;

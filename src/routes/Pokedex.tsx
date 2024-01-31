@@ -1,7 +1,5 @@
 const Pokedex = () => {
-    return (
-        <div>Pokedex</div>
-    )
-}
+  return <div>Pokedex</div>;
+};
 
-export default Pokedex
+export default Pokedex;
