@@ -5,11 +5,15 @@ import Header from '@/components/common/Header';
 
 const Root = () => {
   return (
-    <div className="dark">
+    <main className="flex-center flex-col w-full">
       <Header />
-      <Outlet />
+
+      <section className="flex-grow">
+        <Outlet />
+      </section>
+
       <Footer />
-    </div>
+    </main>
   );
 };
 
