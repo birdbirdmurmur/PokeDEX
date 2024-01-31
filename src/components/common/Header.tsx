@@ -14,7 +14,7 @@ const Header = () => {
         <nav>
           <ul className="hidden h-full gap-12 px-12 sm:flex">
             <li className="base-medium">
-              <NavLink to="/">PokeDEX</NavLink>
+              <NavLink to="/">PokéDEX</NavLink>
             </li>
             <li className="base-medium">
               <NavLink to="/calculator">Calculator</NavLink>
