@@ -8,10 +8,13 @@ import {
   MenubarMenu,
   MenubarTrigger,
 } from '@/components/ui/menubar';
+
 import { getAllPokemonData } from '@/services/api';
+import { PokemonDataProps } from '@/types';
+import { formatDexNr } from '@/lib/utils';
 
 const PokeDex = () => {
-  const [pokemonData, setPokemonData] = useState();
+  const [pokemonData, setPokemonData] = useState<PokemonDataProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,77 +61,34 @@ const PokeDex = () => {
       </div>
 
       {/* All pokemon list */}
-      <div className="flex-center w-full">
-        <div className="flex-between flex-wrap max-w-4xl gap-4">
+      <div className="flex-center max-container w-screen">
+        <div className="grid grid-cols-3 gap-2 px-2 w-11/12">
           {/* Single Card */}
-          <div className="flex-between w-[280px] px-4 py-2 border rounded-xl shadow-md">
-            {/* Left */}
-            <div>
-              <div className="flex-between gap-4">
-                <div>#0001</div> {/* dexNr */}
-                <div>妙蛙種子</div> {/* formId or Id or names.English */}
+          {pokemonData.slice(0, 151).map(data => (
+            <div className="col-span-1 flex-center flex-col w-full mx-auto px-4 py-2 border rounded-xl shadow-md sm:flex-between sm:flex-row">
+              {/* Info */}
+              <div className="flex-between flex-col items-center sm:items-start gap-4">
+                <div className="flex-center flex-col gap-1 sm:flex-row">
+                  <div>#{formatDexNr(data.dexNr)}</div>
+                  <div className="font-bold text-sky-900">{data.formId}</div>
+                </div>
+                <div className="flex-center gap-1">
+                  <label className="text-sky-700 text-sm">{data.primaryType.names.English}</label>
+                  <label className="text-sky-700 text-sm">
+                    {data.secondaryType && data.secondaryType.names.English}
+                  </label>
+                </div>
               </div>
-              <div>
-                <label>草</label> {/* primaryType.names.English */}
-                <label>毒</label> {/* secondaryType.names.English */}
-              </div>
-            </div>
-            {/* Right */}
-            <div>
-              <img src="/assets/icons/poke-ball.svg" alt="" width={60} height={60} />
-            </div>
-          </div>
-          <div className="flex-between w-[280px] px-4 py-2 border rounded-xl shadow-md">
-            {/* Left */}
-            <div>
-              <div className="flex-between gap-4">
-                <div>#0001</div> {/* dexNr */}
-                <div>妙蛙種子</div> {/* formId or Id or names.English */}
-              </div>
-              <div>
-                <label>草</label> {/* primaryType.names.English */}
-                <label>毒</label> {/* secondaryType.names.English */}
+              {/* Image */}
+              <div className="flex-center w-full sm:w-[60px] h-[60px]">
+                <img
+                  src={data.assets.image}
+                  alt={data.formId}
+                  className="w-full h-full aspect-auto object-contain"
+                />
               </div>
             </div>
-            {/* Right */}
-            <div>
-              <img src="/assets/icons/poke-ball.svg" alt="" width={60} height={60} />
-            </div>
-          </div>
-          <div className="flex-between w-[280px] px-4 py-2 border rounded-xl shadow-md">
-            {/* Left */}
-            <div>
-              <div className="flex-between gap-4">
-                <div>#0001</div> {/* dexNr */}
-                <div>妙蛙種子</div> {/* formId or Id or names.English */}
-              </div>
-              <div>
-                <label>草</label> {/* primaryType.names.English */}
-                <label>毒</label> {/* secondaryType.names.English */}
-              </div>
-            </div>
-            {/* Right */}
-            <div>
-              <img src="/assets/icons/poke-ball.svg" alt="" width={60} height={60} />
-            </div>
-          </div>
-          <div className="flex-between w-[280px] px-4 py-2 border rounded-xl shadow-md">
-            {/* Left */}
-            <div>
-              <div className="flex-between gap-4">
-                <div>#0001</div> {/* dexNr */}
-                <div>妙蛙種子</div> {/* formId or Id or names.English */}
-              </div>
-              <div>
-                <label>草</label> {/* primaryType.names.English */}
-                <label>毒</label> {/* secondaryType.names.English */}
-              </div>
-            </div>
-            {/* Right */}
-            <div>
-              <img src="/assets/icons/poke-ball.svg" alt="" width={60} height={60} />
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
