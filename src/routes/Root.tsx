@@ -8,7 +8,7 @@ const Root = () => {
     <main className="flex-center flex-col w-full">
       <Header />
 
-      <section className="flex-grow">
+      <section className="grow">
         <Outlet />
       </section>
 
