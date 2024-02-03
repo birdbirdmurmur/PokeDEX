@@ -5,10 +5,10 @@ import Header from '@/components/common/Header';
 
 const Root = () => {
   return (
-    <main className="flex-center flex-col w-full ">
+    <main className="flex-center flex-col w-full">
       <Header />
 
-      <section className="grow overflow-y-auto">
+      <section className="grow">
         <Outlet />
       </section>
 

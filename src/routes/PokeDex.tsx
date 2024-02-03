@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { Input } from '@/components/ui/input';
 import {
   Menubar,
@@ -9,21 +7,13 @@ import {
   MenubarTrigger,
 } from '@/components/ui/menubar';
 
-import { getAllPokemonData } from '@/services/api';
 import { PokemonDataProps } from '@/types';
 import { formatDexNr } from '@/lib/utils';
+import { Link } from 'react-router-dom';
+import { useDataContext } from '@/context/useContext';
 
 const PokeDex = () => {
-  const [pokemonData, setPokemonData] = useState<PokemonDataProps[]>([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await getAllPokemonData();
-      setPokemonData(data);
-    };
-
-    fetchData();
-  }, []);
+  const data = useDataContext();
 
   return (
     <section className="flex-start flex-col gap-2 w-full h-full py-4">
@@ -64,30 +54,40 @@ const PokeDex = () => {
       <div className="flex-center max-container w-screen">
         <div className="grid grid-cols-3 gap-2 px-2 w-11/12">
           {/* Single Card */}
-          {pokemonData.slice(0, 151).map(data => (
-            <div className="col-span-1 flex-center flex-col w-full mx-auto px-4 py-2 border rounded-xl shadow-md sm:flex-between sm:flex-row">
-              {/* Info */}
-              <div className="flex-between flex-col items-center sm:items-start gap-4">
-                <div className="flex-center flex-col gap-1 sm:flex-row">
-                  <div>#{formatDexNr(data.dexNr)}</div>
-                  <div className="font-bold text-sky-900">{data.formId}</div>
+          {data.map((data: PokemonDataProps, key) => (
+            <Link to={`/pokemon/${data.dexNr}`} key={key} className="hover:scale-105">
+              <div className="col-span-1 flex-center flex-col w-full mx-auto px-4 py-2 border rounded-xl shadow-md sm:flex-between sm:flex-row">
+                {/* Info */}
+                <div className="flex-between flex-col items-center sm:items-start gap-4">
+                  <div className="flex justify-center items-start flex-col gap-1">
+                    <div>#{formatDexNr(data.dexNr)}</div>
+                    <div className="font-bold text-sky-900">{data.formId}</div>
+                  </div>
+                  <div className="flex-center gap-1">
+                    <label className="text-sky-700 text-sm">{data.primaryType.names.English}</label>
+                    <label className="text-sky-700 text-sm">
+                      {data.secondaryType && data.secondaryType.names.English}
+                    </label>
+                  </div>
                 </div>
-                <div className="flex-center gap-1">
-                  <label className="text-sky-700 text-sm">{data.primaryType.names.English}</label>
-                  <label className="text-sky-700 text-sm">
-                    {data.secondaryType && data.secondaryType.names.English}
-                  </label>
+                {/* Image */}
+                <div className="flex-center w-[80px] h-[80px]">
+                  {data.assets && data.assets.image ? (
+                    <img
+                      src={data.assets.image}
+                      alt={data.formId}
+                      className="w-[60px] h-[60px] aspect-auto object-contain"
+                    />
+                  ) : (
+                    <img
+                      src="/assets/icons/poke-ball.svg"
+                      alt={data.formId}
+                      className="w-[40px] h-[40px] aspect-auto object-contain"
+                    />
+                  )}
                 </div>
               </div>
-              {/* Image */}
-              <div className="flex-center w-full sm:w-[60px] h-[60px]">
-                <img
-                  src={data.assets.image}
-                  alt={data.formId}
-                  className="w-full h-full aspect-auto object-contain"
-                />
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
