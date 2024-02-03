@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/menubar';
 
 import { PokemonDataProps } from '@/types';
-import { formatDexNr } from '@/lib/utils';
+import { formatDexNr, formatZhType } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { useDataContext } from '@/context/useContext';
 
@@ -60,13 +60,15 @@ const PokeDex = () => {
                 {/* Info */}
                 <div className="flex-between flex-col items-center sm:items-start gap-4">
                   <div className="flex justify-center items-start flex-col gap-1">
-                    <div>#{formatDexNr(data.dexNr)}</div>
+                    <div className="text-slate-400">#{formatDexNr(data.dexNr)}</div>
                     <div className="font-bold text-sky-900">{data.formId}</div>
                   </div>
                   <div className="flex-center gap-1">
-                    <label className="text-sky-700 text-sm">{data.primaryType.names.English}</label>
                     <label className="text-sky-700 text-sm">
-                      {data.secondaryType && data.secondaryType.names.English}
+                      {formatZhType(data.primaryType.names.English)}
+                    </label>
+                    <label className="text-sky-700 text-sm">
+                      {data.secondaryType && formatZhType(data.secondaryType.names.English)}
                     </label>
                   </div>
                 </div>

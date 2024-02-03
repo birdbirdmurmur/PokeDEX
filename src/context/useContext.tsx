@@ -10,10 +10,14 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getAllPokemonData();
+      try {
+        const data = await getAllPokemonData();
 
-      if (data) {
-        setPokemonData(data);
+        if (data) {
+          setPokemonData(data);
+        }
+      } catch (error) {
+        console.log('Error fetching data: ', error);
       }
     };
 
