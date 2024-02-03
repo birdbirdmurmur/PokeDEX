@@ -1,11 +1,11 @@
-import { useDataContext } from '@/context/useContext';
 import { useParams } from 'react-router-dom';
+import { useDataContext } from '@/context/useContext';
+
+import { formatZhName, formatZhType } from '@/lib/utils';
 
 const PokemonDetails = () => {
   const { id } = useParams();
   const data = useDataContext().find(item => item.dexNr.toString() === id);
-
-  console.log(data);
 
   // Loading
   if (!data) {
@@ -15,30 +15,22 @@ const PokemonDetails = () => {
   return (
     <div className="h-screen text-center">
       <h1 className="font-bold">
-        No.{data.dexNr} {data.formId}
+        No.{data.dexNr} {formatZhName(data.names.English)}
       </h1>
       <p>Generation: {data.generation}</p>
       <div className="flex gap-4">
         {data.assets && data.assets.image ? (
           <>
-            <img
-              src={data.assets.image}
-              alt={data.formId}
-              className="w-[60px] h-[60px] aspect-auto object-contain"
-            />
+            <img src={data.assets.image} alt={data.formId} />
             <img src={data.assets.shinyImage} alt={data.formId} />
           </>
         ) : (
-          <img
-            src="/assets/icons/poke-ball.svg"
-            alt={data.formId}
-            className="w-[40px] h-[40px] aspect-auto object-contain"
-          />
+          <img src="/assets/icons/poke-ball.svg" alt={data.formId} />
         )}
       </div>
       <ul>
-        <li>{data.primaryType.names.English}</li>
-        <li>{data.secondaryType && data.secondaryType.names.English}</li>
+        <li>{formatZhType(data.primaryType.names.English)}</li>
+        <li>{data.secondaryType && formatZhType(data.secondaryType.names.English)}</li>
       </ul>
       <ul>
         <li>HP: {data.stats.stamina}</li>

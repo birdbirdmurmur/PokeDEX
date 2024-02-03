@@ -3,12 +3,12 @@ export type PokemonDataProps = {
   formId: string;
   dexNr: number;
   generation: number;
-  name: Names,
+  names: Names;
   stats: {
     stamina: number;
     attack: number;
     defense: number;
-  }
+  };
   primaryType: {
     type: string;
     names: Names;
@@ -17,7 +17,7 @@ export type PokemonDataProps = {
     type: string;
     names: Names;
   };
-  pokemonClass: string,
+  pokemonClass: string;
   quickMoves: { [key: string]: Move };
   cinematicMoves: { [key: string]: Move };
   eliteQuickMoves: { [key: string]: Move };
@@ -47,12 +47,12 @@ export type Names = {
   Japanese: string;
   Korean: string;
   Spanish: string;
-}
+};
 
 export type TypeInfo = {
   type: string;
   names: Names;
-}
+};
 
 export type Move = {
   id: string;
@@ -62,7 +62,7 @@ export type Move = {
   type: TypeInfo;
   names: Names;
   combat: CombatStats;
-}
+};
 
 export type CombatStats = {
   energy: number;
@@ -75,7 +75,7 @@ export type CombatStats = {
     targetAttackStatsChange: number;
     targetDefenseStatsChange: number;
   };
-}
+};
 
 export type Evolution = {
   id: string;
@@ -90,7 +90,7 @@ export type Evolution = {
     type: string;
     names: Names;
   }[];
-}
+};
 
 export type MegaEvolution = {
   id: string;
@@ -106,7 +106,7 @@ export type MegaEvolution = {
     image: string;
     shinyImage: string;
   };
-}
+};
 
 export type RegionForm = {
   id: string;
@@ -134,4 +134,4 @@ export type RegionForm = {
   evolutions: Evolution[];
   hasMegaEvolution: boolean;
   megaEvolutions: { [key: string]: MegaEvolution };
-}
+};

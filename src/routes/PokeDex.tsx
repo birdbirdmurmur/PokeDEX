@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Input } from '@/components/ui/input';
 import {
   Menubar,
@@ -8,12 +10,19 @@ import {
 } from '@/components/ui/menubar';
 
 import { PokemonDataProps } from '@/types';
-import { formatDexNr, formatZhType } from '@/lib/utils';
+import { formatDexNr, formatZhName, formatZhType } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { useDataContext } from '@/context/useContext';
 
 const PokeDex = () => {
+  const [searchTerm, setSearchTerm] = useState('');
   const data = useDataContext();
+
+  const filteredData = data.filter(
+    pokemon =>
+      pokemon.formId.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      formatZhName(pokemon.names.English).toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   return (
     <section className="flex-start flex-col gap-2 w-full h-full py-4">
@@ -23,6 +32,8 @@ const PokeDex = () => {
           type="search"
           placeholder="Search Pokémon, eg. 妙蛙種子、皮卡丘"
           className="text-slate-500 text-center border-slate-200 rounded-xl shadow-md h-16 w-9/12"
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
         />
       </div>
 
@@ -54,14 +65,14 @@ const PokeDex = () => {
       <div className="flex-center max-container w-screen">
         <div className="grid grid-cols-3 gap-2 px-2 w-11/12">
           {/* Single Card */}
-          {data.map((data: PokemonDataProps, key) => (
+          {filteredData.map((data: PokemonDataProps, key) => (
             <Link to={`/pokemon/${data.dexNr}`} key={key} className="hover:scale-105">
               <div className="col-span-1 flex-center flex-col w-full mx-auto px-4 py-2 border rounded-xl shadow-md sm:flex-between sm:flex-row">
                 {/* Info */}
                 <div className="flex-between flex-col items-center sm:items-start gap-4">
                   <div className="flex justify-center items-start flex-col gap-1">
                     <div className="text-slate-400">#{formatDexNr(data.dexNr)}</div>
-                    <div className="font-bold text-sky-900">{data.formId}</div>
+                    <div className="font-bold text-sky-900">{formatZhName(data.names.English)}</div>
                   </div>
                   <div className="flex-center gap-1">
                     <label className="text-sky-700 text-sm">
