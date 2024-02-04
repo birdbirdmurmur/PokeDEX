@@ -192,6 +192,63 @@ export const allTypes = [
   },
 ];
 
+export const allGeneration = [
+  {
+    id: 1,
+    zh_name: '第一世代',
+    region: '關都',
+    color: '#CC0000',
+  },
+  {
+    id: 2,
+    zh_name: '第二世代',
+    region: '城都',
+    color: '#006666',
+  },
+  {
+    id: 3,
+    zh_name: '第三世代',
+    region: '豐緣',
+    color: '#E6C200',
+  },
+  {
+    id: 4,
+    zh_name: '第四世代',
+    region: '神奧',
+    color: '#75008B',
+  },
+  {
+    id: 5,
+    zh_name: '第五世代',
+    region: '合眾',
+    color: '#004d00',
+  },
+  {
+    id: 6,
+    zh_name: '第六世代',
+    region: '卡洛斯',
+    color: '#D95E19',
+  },
+  {
+    id: 7,
+    zh_name: '第七世代',
+    region: '阿羅拉',
+    color: '#330033',
+  },
+  {
+    id: 8,
+    zh_name: '第八世代',
+    region: '伽勒爾',
+    color: '#3399CC',
+  },
+  {
+    id: 9,
+    zh_name: '第九世代',
+    region: '帕底亞',
+    color: '#FF3385',
+  },
+];
+
 export const allPokemonName = [
   {
     dexNr: 1,

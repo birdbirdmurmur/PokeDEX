@@ -10,9 +10,10 @@ import {
 } from '@/components/ui/menubar';
 
 import { PokemonDataProps } from '@/types';
-import { formatDexNr, formatZhName, formatZhType } from '@/lib/utils';
 import { Link } from 'react-router-dom';
 import { useDataContext } from '@/context/useContext';
+import { allGeneration, allTypes } from '@/constants/data';
+import Loader from '@/components/common/Loader';
 
 const PokeDex = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,9 +21,11 @@ const PokeDex = () => {
 
   const filteredData = data.filter(
     pokemon =>
-      pokemon.formId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      formatZhName(pokemon.names.English).toLowerCase().includes(searchTerm.toLowerCase()),
+      pokemon.names.English.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      pokemon.names.Chinese.toLowerCase().includes(searchTerm.toLowerCase()),
   );
+
+  if (!data || !filteredData) return <Loader />;
 
   return (
     <section className="flex-start flex-col gap-2 w-full h-full py-4">
@@ -39,23 +42,35 @@ const PokeDex = () => {
 
       {/* filter buttons */}
       <div className="flex-center max-container w-screen my-2">
-        <Menubar className="border-slate-200 rounded-xl text-slate-700 shadow-sm">
+        <Menubar className="flex-center text-center border-slate-200 text-slate-700 shadow-sm">
           {/* Type */}
           <MenubarMenu>
             <MenubarTrigger className="cursor-pointer">Type ▼</MenubarTrigger>
-            <MenubarContent className="flex-between flex-row gap-2 bg-white">
-              <MenubarItem className="border rounded-xl">一般</MenubarItem>
-              <MenubarItem className="border rounded-xl">格鬥</MenubarItem>
-              <MenubarItem className="border rounded-xl">飛行</MenubarItem>
+            <MenubarContent className="flex-center flex-wrap gap-2 bg-white w-full">
+              {Object.values(allTypes).map(item => (
+                <MenubarItem
+                  key={item.type}
+                  className="border rounded-xl cursor-pointer font-bold text-white p-2"
+                  style={{ backgroundColor: item.color }} // TODO: 無法使用class加入
+                >
+                  {item.zh_Type}
+                </MenubarItem>
+              ))}
             </MenubarContent>
           </MenubarMenu>
           {/* Generation */}
           <MenubarMenu>
             <MenubarTrigger className="cursor-pointer">Generation ▼</MenubarTrigger>
-            <MenubarContent className="flex-between flex-row gap-2 bg-white">
-              <MenubarItem className="border rounded-xl">第一世代(關都)</MenubarItem>
-              <MenubarItem className="border rounded-xl">第二世代(城都)</MenubarItem>
-              <MenubarItem className="border rounded-xl">第三世代(豐緣)</MenubarItem>
+            <MenubarContent className="flex-center flew-wrap gap-2 bg-white w-full">
+              {Object.values(allGeneration).map(item => (
+                <MenubarItem
+                  key={item.id}
+                  className="border rounded-xl cursor-pointer font-bold text-white p-2"
+                  style={{ backgroundColor: item.color }} // TODO: 無法使用class加入
+                >
+                  {item.zh_name}({item.region})
+                </MenubarItem>
+              ))}
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
@@ -63,39 +78,37 @@ const PokeDex = () => {
 
       {/* All pokemon list */}
       <div className="flex-center max-container w-screen">
-        <div className="grid grid-cols-3 gap-2 px-2 w-11/12">
+        <div className="grid grid-cols-3 gap-2">
           {/* Single Card */}
-          {filteredData.map((data: PokemonDataProps, key) => (
-            <Link to={`/pokemon/${data.dexNr}`} key={key} className="hover:scale-105">
-              <div className="col-span-1 flex-center flex-col w-full mx-auto px-4 py-2 border rounded-xl shadow-md sm:flex-between sm:flex-row">
+          {filteredData.map((data: PokemonDataProps) => (
+            <Link to={`/pokemon/${data.dexNr}`} key={data.id} className="hover:scale-105">
+              <div className="col-span-1 flex-center flex-col w-full mx-auto px-4 py-2 border rounded-xl shadow-md sm:flex-between sm:flex-row gap-1">
                 {/* Info */}
-                <div className="flex-between flex-col items-center sm:items-start gap-4">
-                  <div className="flex justify-center items-start flex-col gap-1">
-                    <div className="text-slate-400">#{formatDexNr(data.dexNr)}</div>
-                    <div className="font-bold text-sky-900">{formatZhName(data.names.English)}</div>
-                  </div>
-                  <div className="flex-center gap-1">
+                <div className="flex-between flex-col sm:flex-start gap-1">
+                  {/* Name */}
+                  <div className="text-slate-400 sm:text-center">#{data.dexNr}</div>
+                  <div className="font-bold text-sky-900">{data.names.Chinese}</div>
+                  {/* Type */}
+                  <div className="flex-start gap-1">
+                    <label className="text-sky-700 text-sm">{data.primaryType.names.Chinese}</label>
                     <label className="text-sky-700 text-sm">
-                      {formatZhType(data.primaryType.names.English)}
-                    </label>
-                    <label className="text-sky-700 text-sm">
-                      {data.secondaryType && formatZhType(data.secondaryType.names.English)}
+                      {data.secondaryType && data.secondaryType.names.Chinese}
                     </label>
                   </div>
                 </div>
                 {/* Image */}
-                <div className="flex-center w-[80px] h-[80px]">
+                <div className="flex-center">
                   {data.assets && data.assets.image ? (
                     <img
                       src={data.assets.image}
                       alt={data.formId}
-                      className="w-[60px] h-[60px] aspect-auto object-contain"
+                      className="w-20 h-20 object-contain"
                     />
                   ) : (
                     <img
                       src="/assets/icons/poke-ball.svg"
                       alt={data.formId}
-                      className="w-[40px] h-[40px] aspect-auto object-contain"
+                      className="w-10 h-10 object-contain"
                     />
                   )}
                 </div>

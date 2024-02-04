@@ -47,6 +47,7 @@ export type Names = {
   Japanese: string;
   Korean: string;
   Spanish: string;
+  Chinese: string;
 };
 
 export type TypeInfo = {
