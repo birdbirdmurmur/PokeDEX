@@ -2,6 +2,7 @@ import { Outlet } from 'react-router-dom';
 
 import Footer from '@/components/common/Footer';
 import Header from '@/components/common/Header';
+import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 
 const Root = () => {
   return (
@@ -11,6 +12,7 @@ const Root = () => {
       <section className="grow min-h-[90dvh]">
         <Outlet />
       </section>
+      <ScrollToTopButton />
 
       <Footer />
     </div>

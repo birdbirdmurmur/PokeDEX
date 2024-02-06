@@ -16,12 +16,12 @@ type FilterButtonsProps = {
 const FilterButtons = ({ handleTypeClick, handleGenerationClick }: FilterButtonsProps) => {
   return (
     <Menubar className="flex-center text-center border-slate-200 text-slate-700 shadow-sm rounded-xl my-2">
+      {/* Type */}
       <MenubarMenu>
-        {/* Type */}
         <MenubarTrigger className="cursor-pointer rounded-xl hover:bg-slate-200">
           Type ▼
         </MenubarTrigger>
-        <MenubarContent className="grid grid-cols-3 gap-2 bg-white w-full">
+        <MenubarContent className="grid grid-cols-3 gap-2 bg-white rounded-xl w-full p-2">
           {Object.values(allTypes).map(item => (
             <MenubarItem
               key={item.type}
@@ -39,11 +39,11 @@ const FilterButtons = ({ handleTypeClick, handleGenerationClick }: FilterButtons
         <MenubarTrigger className="cursor-pointer rounded-xl hover:bg-slate-200">
           Generation ▼
         </MenubarTrigger>
-        <MenubarContent className="grid grid-cols-3 gap-2 bg-white w-full">
+        <MenubarContent className="grid grid-cols-2 gap-2 bg-white rounded-xl w-full p-2">
           {Object.values(allGeneration).map(item => (
             <MenubarItem
               key={item.id}
-              className="flex-center rounded-xl cursor-pointer font-bold text-white p-2"
+              className="flex-center rounded-xl cursor-pointer font-bold text-white p-2 "
               style={{ backgroundColor: item.color }} // TODO: 無法使用class加入
               onClick={() => handleGenerationClick(item.zh_name)}
             >

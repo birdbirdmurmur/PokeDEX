@@ -8,12 +8,12 @@ type SingleCardProps = {
 const SingleCard = ({ data }: SingleCardProps) => {
   return (
     <Link to={`/pokemon/${data.dexNr}`} className="hover:scale-105 hover:shadow-lg transition-all">
-      <div className="flex-center flex-col w-full mx-auto px-2 py-1 border rounded-xl shadow-md sm:flex-between sm:flex-row gap-2">
+      <div className="flex-center flex-col w-full mx-auto px-2 py-1 border rounded-xl shadow-md sm:flex-between md:flex-row gap-2">
         {/* Info */}
-        <div className="flex-center flex-col gap-2">
+        <div className="flex-center flex-col gap-2 w-content whitespace-nowrap">
           {/* Title */}
-          <div className="flex flex-col sm:flex-row text-center w-full">
-            <div className="text-slate-300 w-12 ">#{data.dexNr}</div>
+          <div className="flex flex-col sm:flex-row gap-0 sm:gap-2 text-center w-full">
+            <div className="text-slate-300 w-full">#{data.dexNr}</div>
             <div className="font-bold text-sky-900 w-full">{data.names.Chinese}</div>
           </div>
           {/* Type */}
