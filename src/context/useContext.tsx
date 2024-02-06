@@ -30,6 +30,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
                   Chinese: allTypes.find(type => type.type === item.primaryType.names.English)
                     ?.zh_Type,
                 },
+                color: allTypes.find(type => type.type === item.primaryType.names.English)?.color,
               },
             };
 
@@ -40,8 +41,11 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
                   ...item.secondaryType.names,
                   Chinese:
                     allTypes.find(type => type.type === item.secondaryType.names.English)
-                      ?.zh_Type ?? 'defaultChineseValue',
+                      ?.zh_Type ?? '',
                 },
+                color:
+                  allTypes.find(type => type.type === item.secondaryType.names.English)?.color ??
+                  '',
               };
             }
 

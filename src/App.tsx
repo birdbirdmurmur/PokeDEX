@@ -10,7 +10,7 @@ import PokemonDetails from './routes/PokemonDetails';
 
 const App = () => {
   return (
-    <main className="h-full">
+    <main>
       <Routes>
         <Route element={<Root />}>
           <Route index element={<PokeDex />} />

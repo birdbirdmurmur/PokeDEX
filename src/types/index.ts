@@ -12,10 +12,12 @@ export type PokemonDataProps = {
   primaryType: {
     type: string;
     names: Names;
+    color: string;
   };
   secondaryType: {
     type: string;
     names: Names;
+    color: string;
   };
   pokemonClass: string;
   quickMoves: { [key: string]: Move };
