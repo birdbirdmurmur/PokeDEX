@@ -36,10 +36,8 @@ const Header = () => {
 
         {/* Menu button */}
         <Sheet>
-          <SheetTrigger className="flex-center cursor-pointer sm:hidden">
-            <button className="flex-center mr-8 cursor-pointer sm:hidden">
-              <img src="/assets/icons/menu.svg" alt="menu" width={32} height={32} />
-            </button>
+          <SheetTrigger className="flex-center mr-8 cursor-pointer sm:hidden">
+            <img src="/assets/icons/menu.svg" alt="menu" width={32} height={32} />
           </SheetTrigger>
           <SheetContent side="right" className="w-64 bg-slate-300 border-none">
             <SheetHeader className="flex my-4">

@@ -1,45 +1,16 @@
-import { useEffect, useState } from 'react';
-
 import { Input } from '@/components/ui/input';
 import SingleCard from '@/components/common/SingleCard';
 import FilterButtons from '@/components/common/FilterButtons';
 import Loader from '@/components/common/Loader';
 
 import { useDataContext } from '@/context/useContext';
-import useDebounce from '@/hooks/useDebounce';
 import { PokemonDataProps } from '@/types';
 
 const PokeDex = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredData, setFilteredData] = useState<PokemonDataProps[]>([]);
-  const debouncedSearch = useDebounce(searchTerm, 500);
+  const { filteredData, searchTerm, setSearchTerm, handleTypeClick, handleGenerationClick } =
+    useDataContext();
 
-  const data = useDataContext();
-
-  const handleTypeClick = (type: string) => {
-    setFilteredData(
-      data.filter(pokemon => pokemon.assets && pokemon.primaryType.names.Chinese === type),
-    );
-  };
-
-  const handleGenerationClick = (generation: string) => {
-    setFilteredData(
-      data.filter(pokemon => pokemon.assets && pokemon.generation.toString() === generation),
-    );
-  };
-
-  useEffect(() => {
-    const filteredData = data.filter(
-      pokemon =>
-        pokemon.assets &&
-        (pokemon.names.English.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          pokemon.names.Chinese.toLowerCase().includes(searchTerm.toLowerCase())),
-    );
-
-    setFilteredData(filteredData);
-  }, [data, debouncedSearch]);
-
-  if (!filteredData) return <Loader />;
+  if (filteredData.length === 0) return <Loader />;
 
   return (
     <div className="flex-start flex-col max-container w-full gap-2 py-4">

@@ -2,7 +2,7 @@ export type PokemonDataProps = {
   id: string;
   formId: string;
   dexNr: number;
-  generation: number;
+  generation: string;
   names: Names;
   stats: {
     stamina: number;
@@ -93,6 +93,7 @@ export type Evolution = {
     type: string;
     names: Names;
   }[];
+  zh_name: string;
 };
 
 export type MegaEvolution = {

@@ -6,73 +6,128 @@ import Loader from '@/components/common/Loader';
 
 const PokemonDetails = () => {
   const { id } = useParams();
-  const data = useDataContext().find(item => item.dexNr.toString() === id);
+  const { filteredData } = useDataContext();
+
+  const data = filteredData.find(data => data.dexNr.toString() === id);
+  // ⬆️可用 new Map修改
 
   if (!data) return <Loader />;
 
   return (
-    <div className="flex-center flex-col max-container w-full">
+    <div className="flex-center flex-col max-container">
       {/* Top */}
-      <div className="flex-center">
-        <h1 className="text-2xl font-bold">
-          No.{data.dexNr} {data.names.Chinese}
-        </h1>
-        <p className="text-gray-500">{data.generation}</p>
-        <div className="flex justify-center gap-4 my-4">
-          {data.assets && data.assets.image ? (
-            <>
-              <img
-                src={data.assets.image}
-                alt={data.formId}
-                className="w-32 h-32 object-cover rounded"
-              />
-              <img
-                src={data.assets.shinyImage}
-                alt={data.formId}
-                className="w-32 h-32 object-cover rounded"
-              />
-            </>
-          ) : (
-            <img
-              src="/assets/icons/poke-ball.svg"
-              alt={data.formId}
-              className="w-32 h-32 object-cover rounded"
-            />
-          )}
+      <div className="flex-center flex-col w-full mt-3">
+        {/* Title */}
+        <div className="flex-between flex-col sm:flex-row gap-0 sm:gap-4 text-center w-1/2">
+          <p className="base-medium text-slate-400">#{data.dexNr}</p>
+          <h2 className="h2-bold text-sky-900">{data.names.Chinese}</h2>
+          <div className="base-medium text-slate-400">{data.generation}</div>
+        </div>
+        {/* Image */}
+        <div className="flex justify-center gap-4 my-2">
+          <img
+            src={data.assets.image}
+            alt={data.formId}
+            className="aspect-auto object-contain rounded"
+          />
+          <img
+            src={data.assets.shinyImage}
+            alt={data.formId}
+            className="hidden sm:block aspect-auto object-contain rounded"
+          />
         </div>
       </div>
 
       {/* Bottom */}
-      <div className="flex-between outline">
+      <div className="flex flex-col sm:flex-row gap-12 max-container w-full">
         {/* Details - Left */}
-        <div>
-          {/* Type */}
-          <Card className="">
-            <CardHeader>
+        <div className="flex flex-col gap-4 w-full">
+          {/* Info */}
+          <Card className="flex-center flex-col rounded-xl shadow-md w-full">
+            {/* Type */}
+            <CardHeader className="mb-2 p-0">
               <CardTitle className="text-md">屬性</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>{data.primaryType.names.Chinese}</p>
-              {data.secondaryType && (
-                <p className="capitalize">{data.secondaryType.names.Chinese}</p>
-              )}
+              <div className="flex-center sm:flex-start gap-1 font-bold text-white text-xs sm:text-sm w-full">
+                <label
+                  className="px-2 py-1 rounded-xl"
+                  style={{ backgroundColor: data.primaryType.color }}
+                >
+                  {data.primaryType.names.Chinese}
+                </label>
+                {data.secondaryType && (
+                  <label
+                    className="px-2 py-1 rounded-xl"
+                    style={{ backgroundColor: data.secondaryType.color }}
+                  >
+                    {data.secondaryType.names.Chinese}
+                  </label>
+                )}
+              </div>
             </CardContent>
-          </Card>
-          {/* Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-md">基本數值</CardTitle>
+
+            {/* Stats */}
+            <CardHeader className="mb-2 p-0">
+              <CardTitle className="text-md">基礎值</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>HP: {data.stats.stamina}</p>
-              <p>ATT: {data.stats.attack}</p>
-              <p>DEF: {data.stats.defense}</p>
+              <div className="flex-center gap-5 w-48">
+                <p>HP:</p>
+                <div className="w-full h-2 border bg-slate-300 rounded-xl">
+                  <div
+                    className="h-2 bg-sky-500 rounded-xl"
+                    style={{ width: `${(data.stats.stamina / 255) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+              <div className="flex-center gap-5 w-48">
+                <p>ATT:</p>
+                <div className="w-full h-2 border bg-slate-300 rounded-xl">
+                  <div
+                    className="h-2 bg-sky-500 rounded-xl"
+                    style={{ width: `${(data.stats.attack / 255) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+              <div className="flex-center gap-5 w-48">
+                <p>DEF:</p>
+                <div className="w-full h-2 border bg-slate-300 rounded-xl">
+                  <div
+                    className="h-2 bg-sky-500 rounded-xl"
+                    style={{ width: `${(data.stats.defense / 255) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Evolution */}
+          <Card className="flex-center flex-col rounded-xl shadow-md">
+            <CardHeader className="mb-2 p-0">
+              <CardTitle className="text-md">進化</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {data.evolutions.map(evo => (
+                <ul key={evo.id} className="flex gap-4">
+                  <li>{evo.zh_name}</li>
+                  <li>所需糖果: {evo.candies}</li>
+                </ul>
+              ))}
+              <ul>
+                {data.hasMegaEvolution && <li>Yes</li>}
+                {Object.values(data.megaEvolutions).map(evo => (
+                  <li key={evo.id}>{evo.names.English}</li>
+                ))}
+              </ul>
             </CardContent>
           </Card>
         </div>
+
         {/* Details - Right */}
-        <div className="flex-center flex-col my-4">
-          <Card>
+        {/* Moves */}
+        <div className="flex flex-col gap-4 w-full">
+          <Card className="flex-center flex-col rounded-xl shadow-md">
             <CardHeader>
               <CardTitle className="text-md">一般招式</CardTitle>
             </CardHeader>
@@ -84,9 +139,6 @@ const PokemonDetails = () => {
                 <p key={move.id}>{move.names.English} (elite)</p>
               ))}
             </CardContent>
-          </Card>
-
-          <Card>
             <CardHeader>
               <CardTitle className="text-md">特殊招式</CardTitle>
             </CardHeader>
@@ -100,22 +152,6 @@ const PokemonDetails = () => {
             </CardContent>
           </Card>
         </div>
-      </div>
-
-      <div>
-        <h3 className="font-bold mb-2">進化</h3>
-        {data.evolutions.map(evo => (
-          <ul key={evo.id}>
-            <li>{evo.id}</li>
-            <li>Candies: {evo.candies}</li>
-          </ul>
-        ))}
-        <ul>
-          {data.hasMegaEvolution && <li>Yes</li>}
-          {Object.values(data.megaEvolutions).map(evo => (
-            <li key={evo.id}>{evo.names.English}</li>
-          ))}
-        </ul>
       </div>
     </div>
   );

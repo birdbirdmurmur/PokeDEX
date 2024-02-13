@@ -15,44 +15,46 @@ type FilterButtonsProps = {
 
 const FilterButtons = ({ handleTypeClick, handleGenerationClick }: FilterButtonsProps) => {
   return (
-    <Menubar className="flex-center text-center border-slate-200 text-slate-700 shadow-sm rounded-xl my-2">
-      {/* Type */}
-      <MenubarMenu>
-        <MenubarTrigger className="cursor-pointer rounded-xl hover:bg-slate-200">
-          Type ▼
-        </MenubarTrigger>
-        <MenubarContent className="grid grid-cols-3 gap-2 bg-white rounded-xl w-full p-2">
-          {Object.values(allTypes).map(item => (
-            <MenubarItem
-              key={item.type}
-              className="flex-center rounded-xl cursor-pointer font-bold text-white p-2"
-              style={{ backgroundColor: item.color }} // TODO: 無法使用class加入
-              onClick={() => handleTypeClick(item.zh_Type)}
-            >
-              {item.zh_Type}
-            </MenubarItem>
-          ))}
-        </MenubarContent>
-      </MenubarMenu>
-      {/* Generation */}
-      <MenubarMenu>
-        <MenubarTrigger className="cursor-pointer rounded-xl hover:bg-slate-200">
-          Generation ▼
-        </MenubarTrigger>
-        <MenubarContent className="grid grid-cols-2 gap-2 bg-white rounded-xl w-full p-2">
-          {Object.values(allGeneration).map(item => (
-            <MenubarItem
-              key={item.id}
-              className="flex-center rounded-xl cursor-pointer font-bold text-white p-2 "
-              style={{ backgroundColor: item.color }} // TODO: 無法使用class加入
-              onClick={() => handleGenerationClick(item.zh_name)}
-            >
-              {item.zh_name}({item.region})
-            </MenubarItem>
-          ))}
-        </MenubarContent>
-      </MenubarMenu>
-    </Menubar>
+    <div className="flex-center gap-4">
+      <Menubar className="flex-center gap-1 text-center border-slate-200 text-slate-700 shadow-sm rounded-xl my-2">
+        {/* Type */}
+        <MenubarMenu>
+          <MenubarTrigger className="cursor-pointer rounded-xl hover:bg-slate-200 transition ease-in-out duration-300">
+            屬性 ▼
+          </MenubarTrigger>
+          <MenubarContent className="grid grid-cols-3 sm:flex-center flex-wrap gap-2 bg-white rounded-xl w-full p-2 ">
+            {Object.values(allTypes).map(item => (
+              <MenubarItem
+                key={item.type}
+                className="flex-center rounded-xl cursor-pointer font-bold text-white p-2"
+                style={{ backgroundColor: item.color }} // TODO: 無法使用class加入
+                onClick={() => handleTypeClick(item.zh_Type)}
+              >
+                {item.zh_Type}
+              </MenubarItem>
+            ))}
+          </MenubarContent>
+        </MenubarMenu>
+        {/* Generation */}
+        <MenubarMenu>
+          <MenubarTrigger className="cursor-pointer rounded-xl hover:bg-slate-200 transition ease-in-out duration-300">
+            世代 ▼
+          </MenubarTrigger>
+          <MenubarContent className="flex-center flex-wrap gap-2 bg-white rounded-xl p-2 w-1/2 sm:w-fit">
+            {Object.values(allGeneration).map(item => (
+              <MenubarItem
+                key={item.id}
+                className="flex-center rounded-xl cursor-pointer font-bold text-white p-2"
+                style={{ backgroundColor: item.color }} // TODO: 無法使用class加入
+                onClick={() => handleGenerationClick(item.zh_name)}
+              >
+                {item.region} ({item.id})
+              </MenubarItem>
+            ))}
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
+    </div>
   );
 };
 
