@@ -39,6 +39,9 @@ export type PokemonDataProps = {
   evolutions: Evolution[];
   hasMegaEvolution: boolean;
   megaEvolutions: { [key: string]: MegaEvolution };
+  maxCP: {
+    lv40: number;
+  };
 };
 
 export type Names = {
