@@ -3,6 +3,7 @@ import { createContext, useContext, useState, useEffect, SetStateAction, Dispatc
 import { PokemonDataProps } from '@/types';
 import useDebounce from '@/hooks/useDebounce';
 import { usePokemonData } from '@/lib/queries/queries';
+import Loader from '@/components/common/Loader';
 
 type DataContextProps = {
   filteredData: PokemonDataProps[];
@@ -21,23 +22,24 @@ const DataContext = createContext<DataContextProps>({
 });
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
-  const { data: allPokemonData } = usePokemonData();
+  const { data: allPokemonData, isSuccess, isLoading } = usePokemonData();
 
   const [filteredData, setFilteredData] = useState<PokemonDataProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const debouncedSearch = useDebounce(searchTerm, 500);
 
+  // 當searchTerm改變時，篩選資料
   useEffect(() => {
-    if (allPokemonData) {
+    if (isSuccess) {
       const filteredData = allPokemonData.filter(
         pokemon =>
-          pokemon.names.English.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          pokemon.names.Chinese.toLowerCase().includes(searchTerm.toLowerCase()),
+          pokemon.names.English.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+          pokemon.names.Chinese.toLowerCase().includes(debouncedSearch.toLowerCase()),
       );
       setFilteredData(filteredData);
     }
-  }, [allPokemonData, debouncedSearch]);
+  }, [isSuccess, debouncedSearch]);
 
   // =========Handle Function
   const handleTypeClick = (type: string) => {
@@ -54,12 +56,14 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
   const handleGenerationClick = (generation: string) => {
     if (allPokemonData) {
-      setFilteredData(
-        allPokemonData.filter(pokemon => pokemon.generation.toString() === generation),
-      );
+      setFilteredData(allPokemonData.filter(pokemon => pokemon.generation === generation));
     }
   };
   // =========Handle Function
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const value = {
     filteredData,

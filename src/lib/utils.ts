@@ -1,5 +1,5 @@
-import { allGeneration, allPokemonName, allTypes } from '@/constants/data';
-import { PokemonDataProps } from '@/types';
+import { CMP, allGeneration, allPokemonName, allTypes } from '@/constants/data';
+import { IVsProps, PokemonDataProps } from '@/types';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -9,14 +9,18 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Calculate CP
-export function calculateCP(stats: PokemonDataProps['stats']) {
+export function calculateCP(stats: PokemonDataProps['stats'], level: number) {
+  const { attack, defense, stamina } = stats;
+  const CMPnumber = CMP.find(item => item.level === level)?.value ?? 0;
   return Math.round(
-    ((stats.attack + 15) *
-      Math.sqrt(stats.stamina + 15) *
-      Math.sqrt(stats.defense + 15) *
-      Math.pow(0.79030001, 2)) /
+    ((attack + 15) * Math.sqrt(stamina + 15) * Math.sqrt(defense + 15) * Math.pow(CMPnumber, 2)) /
       10,
   );
+}
+
+export function calculateIV({ attack, defense, hp }: IVsProps) {
+  const IV = Math.round(((attack + defense + hp) / 45) * 100);
+  return IV;
 }
 
 export function getZhName(dexNr: number) {
@@ -62,7 +66,14 @@ export function updatedPokemonData(item: PokemonDataProps) {
           ?.zh_name ?? '',
     })),
     maxCP: {
-      lv40: item.stats && calculateCP(item.stats),
+      lv20: item.stats && calculateCP(item.stats, 20),
+      lv25: item.stats && calculateCP(item.stats, 25),
+      lv30: item.stats && calculateCP(item.stats, 30),
+      lv35: item.stats && calculateCP(item.stats, 35),
+      lv40: item.stats && calculateCP(item.stats, 40),
+      lv45: item.stats && calculateCP(item.stats, 45),
+      lv50: item.stats && calculateCP(item.stats, 50),
+      lv51: item.stats && calculateCP(item.stats, 51),
     },
   };
 }

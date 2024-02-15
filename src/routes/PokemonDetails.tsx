@@ -1,7 +1,16 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useDataContext } from '@/context/useContext';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+
 import Loader from '@/components/common/Loader';
 
 const PokemonDetails = () => {
@@ -72,34 +81,54 @@ const PokemonDetails = () => {
               <CardTitle className="text-md">基礎值</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex-center gap-5 w-48">
-                <p>HP:</p>
-                <div className="w-full h-2 border bg-slate-300 rounded-xl">
-                  <div
-                    className="h-2 bg-sky-500 rounded-xl"
-                    style={{ width: `${(data.stats.stamina / 255) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className="flex-center gap-5 w-48">
-                <p>ATT:</p>
-                <div className="w-full h-2 border bg-slate-300 rounded-xl">
-                  <div
-                    className="h-2 bg-sky-500 rounded-xl"
-                    style={{ width: `${(data.stats.attack / 255) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
-              <div className="flex-center gap-5 w-48">
-                <p>DEF:</p>
-                <div className="w-full h-2 border bg-slate-300 rounded-xl">
-                  <div
-                    className="h-2 bg-sky-500 rounded-xl"
-                    style={{ width: `${(data.stats.defense / 255) * 100}%` }}
-                  ></div>
-                </div>
-              </div>
+              <Table>
+                <TableBody>
+                  {/* Attack */}
+                  <TableRow className="flex-between border-none">
+                    <TableCell className="p-0 w-12">攻擊：</TableCell>
+                    <TableCell className="w-32 p-0">
+                      <div className="h-2 border bg-slate-300 rounded-xl">
+                        <div
+                          className="h-2 bg-red-500 rounded-xl"
+                          style={{ width: `${(data.stats.attack / 500) * 100}%` }}
+                        ></div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="p-0">{data.stats.attack}</TableCell>
+                  </TableRow>
+                  {/* Defense */}
+                  <TableRow className="flex-between border-none">
+                    <TableCell className="p-0 w-12">防禦：</TableCell>
+                    <TableCell className="w-32 p-0">
+                      <div className="h-2 border bg-slate-300 rounded-xl">
+                        <div
+                          className="h-2 bg-green-500 rounded-xl"
+                          style={{ width: `${(data.stats.defense / 500) * 100}%` }}
+                        ></div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="p-0">{data.stats.defense}</TableCell>
+                  </TableRow>
+                  {/* HP */}
+                  <TableRow className="flex-between border-none">
+                    <TableCell className="p-0 w-12">HP：</TableCell>
+                    <TableCell className="w-32 p-0">
+                      <div className="h-2 border bg-slate-300 rounded-xl">
+                        <div
+                          className="h-2 bg-sky-500 rounded-xl"
+                          style={{ width: `${(data.stats.stamina / 500) * 100}%` }}
+                        ></div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="p-0">{data.stats.stamina}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
             </CardContent>
+
+            {/* Max CP */}
+            <CardHeader>最大CP</CardHeader>
+            <CardContent>Lv40: {data.maxCP.lv40}</CardContent>
           </Card>
 
           {/* Evolution */}
@@ -112,10 +141,23 @@ const PokemonDetails = () => {
                 <ul key={evo.id} className="flex gap-4">
                   <li>{evo.zh_name}</li>
                   <li>所需糖果: {evo.candies}</li>
+                  {filteredData.find(pokemon => pokemon.id === evo.id) && (
+                    <Link
+                      to={`/pokemon/${filteredData.find(pokemon => pokemon.id === evo.id)?.dexNr}`}
+                      className="flex-center gap-1"
+                    >
+                      <img
+                        src={filteredData.find(pokemon => pokemon.id === evo.id)?.assets.image}
+                        alt={filteredData.find(pokemon => pokemon.id === evo.id)?.formId}
+                        className="aspect-auto object-contain rounded"
+                      />
+                    </Link>
+                  )}
                 </ul>
               ))}
+
               <ul>
-                {data.hasMegaEvolution && <li>Yes</li>}
+                {data.hasMegaEvolution && <li>超級進化：</li>}
                 {Object.values(data.megaEvolutions).map(evo => (
                   <li key={evo.id}>{evo.names.English}</li>
                 ))}
@@ -128,28 +170,90 @@ const PokemonDetails = () => {
         {/* Moves */}
         <div className="flex flex-col gap-4 w-full">
           <Card className="flex-center flex-col rounded-xl shadow-md">
-            <CardHeader>
-              <CardTitle className="text-md">一般招式</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {Object.values(data.quickMoves).map(move => (
-                <p key={move.id}>{move.names.English}</p>
-              ))}
-              {Object.values(data.eliteQuickMoves).map(move => (
-                <p key={move.id}>{move.names.English} (elite)</p>
-              ))}
-            </CardContent>
-            <CardHeader>
-              <CardTitle className="text-md">特殊招式</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {Object.values(data.cinematicMoves).map(move => (
-                <li key={move.id}>{move.names.English}</li>
-              ))}
-              {Object.values(data.eliteCinematicMoves).map(move => (
-                <li key={move.id}>{move.names.English} (elite)</li>
-              ))}
-            </CardContent>
+            <Table>
+              {/* Quick Moves */}
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">一般招式</TableHead>
+                  <TableHead className="text-right">傷害</TableHead>
+                  <TableHead className="hidden text-right">冷卻時間</TableHead>
+                  <TableHead className="hidden text-right">能量</TableHead>
+                  <TableHead className="text-right">EPS</TableHead>
+                  <TableHead className="text-right">DPS</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {Object.values(data.quickMoves).map(move => (
+                  <TableRow>
+                    <TableCell className="font-medium">{move.names.English}</TableCell>
+                    <TableCell className="text-right">{move.power}</TableCell>
+                    <TableCell className="hidden text-right">{move.durationMs / 1000}s</TableCell>
+                    <TableCell className="hidden text-right">{move.energy}</TableCell>
+                    <TableCell className="text-right">
+                      {(move.energy / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {(move.power / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {Object.values(data.eliteQuickMoves).map(move => (
+                  <TableRow>
+                    <TableCell className="font-medium">{move.names.English}(elite)</TableCell>
+                    <TableCell className="text-right">{move.power}</TableCell>
+                    <TableCell className="hidden text-right">{move.durationMs / 1000}s</TableCell>
+                    <TableCell className="hidden text-right">{move.energy}</TableCell>
+                    <TableCell className="text-right">
+                      {(move.energy / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {(move.power / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+              {/* Cinematic Moves */}
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">特殊招式</TableHead>
+                  <TableHead className="text-right">傷害</TableHead>
+                  <TableHead className="hidden text-right">冷卻時間</TableHead>
+                  <TableHead className="hidden text-right">能量</TableHead>
+                  <TableHead className="text-right">EPS</TableHead>
+                  <TableHead className="text-right">DPS</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {Object.values(data.cinematicMoves).map(move => (
+                  <TableRow>
+                    <TableCell className="font-medium">{move.names.English}</TableCell>
+                    <TableCell className="text-right">{move.power}</TableCell>
+                    <TableCell className="hidden text-right">{move.durationMs / 1000}s</TableCell>
+                    <TableCell className="hidden text-right">{move.energy}</TableCell>
+                    <TableCell className="text-right">
+                      {(move.energy / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {(move.power / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {Object.values(data.eliteCinematicMoves).map(move => (
+                  <TableRow>
+                    <TableCell className="font-medium">{move.names.English}(elite)</TableCell>
+                    <TableCell className="text-right">{move.power}</TableCell>
+                    <TableCell className="hidden text-right">{move.durationMs / 1000}s</TableCell>
+                    <TableCell className="hidden text-right">{move.energy}</TableCell>
+                    <TableCell className="text-right">
+                      {(move.energy / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {(move.power / (move.durationMs / 1000)).toFixed(1)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </Card>
         </div>
       </div>

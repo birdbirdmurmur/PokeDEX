@@ -40,7 +40,14 @@ export type PokemonDataProps = {
   hasMegaEvolution: boolean;
   megaEvolutions: { [key: string]: MegaEvolution };
   maxCP: {
+    lv20: number;
+    lv25: number;
+    lv30: number;
+    lv35: number;
     lv40: number;
+    lv45: number;
+    lv50: number;
+    lv51: number;
   };
 };
 
@@ -141,4 +148,10 @@ export type RegionForm = {
   evolutions: Evolution[];
   hasMegaEvolution: boolean;
   megaEvolutions: { [key: string]: MegaEvolution };
+};
+
+export type IVsProps = {
+  attack: number;
+  defense: number;
+  hp: number;
 };

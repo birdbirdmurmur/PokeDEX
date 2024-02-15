@@ -9,24 +9,18 @@ const URLS = {
 };
 
 export const getAllPokemonData = async () => {
-  try {
-    const res = await axios.get(URLS.AllPokemon);
-    const data = res.data;
-    const updatedData = data
-      .filter((item: PokemonDataProps) => item.assets)
-      .map(updatedPokemonData);
+  const res = await axios.get(URLS.AllPokemon);
+  const data = res.data;
+  // 直接篩選掉assets為空的資料
+  const updatedData = await data
+    .filter((item: PokemonDataProps) => item.assets)
+    .map(updatedPokemonData);
 
-    return updatedData;
-  } catch (error) {
-    console.log('Error fetching data: ', error);
-  }
+  return updatedData;
 };
 
 export const getCurrentRaidBosses = async () => {
-  try {
-    const res = await axios.get(URLS.RaidBosses);
-    return res.data;
-  } catch (error) {
-    console.log('Error fetching data: ', error);
-  }
+  const res = await axios.get(URLS.RaidBosses);
+  const data = res.data;
+  return data;
 };

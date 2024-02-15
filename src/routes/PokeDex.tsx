@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input';
 import SingleCard from '@/components/common/SingleCard';
 import FilterButtons from '@/components/common/FilterButtons';
-import Loader from '@/components/common/Loader';
+// import Loader from '@/components/common/Loader';
 
 import { useDataContext } from '@/context/useContext';
 import { PokemonDataProps } from '@/types';
@@ -10,7 +10,7 @@ const PokeDex = () => {
   const { filteredData, searchTerm, setSearchTerm, handleTypeClick, handleGenerationClick } =
     useDataContext();
 
-  if (filteredData.length === 0) return <Loader />;
+  // if (filteredData.length === 0) return <Loader />;
 
   return (
     <div className="flex-start flex-col max-container w-full gap-2 py-4">
