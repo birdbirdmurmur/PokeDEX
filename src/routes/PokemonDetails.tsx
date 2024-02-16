@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/table';
 
 import Loader from '@/components/common/Loader';
+import TypeLabel from '@/components/common/TypeLabel';
 
 const PokemonDetails = () => {
   const { id } = useParams();
@@ -59,19 +60,15 @@ const PokemonDetails = () => {
             </CardHeader>
             <CardContent>
               <div className="flex-center sm:flex-start gap-1 font-bold text-white text-xs sm:text-sm w-full">
-                <label
-                  className="px-2 py-1 rounded-xl"
-                  style={{ backgroundColor: data.primaryType.color }}
-                >
-                  {data.primaryType.names.Chinese}
-                </label>
+                <TypeLabel
+                  backgroundColor={data.primaryType.color}
+                  text={data.primaryType.names.Chinese}
+                />
                 {data.secondaryType && (
-                  <label
-                    className="px-2 py-1 rounded-xl"
-                    style={{ backgroundColor: data.secondaryType.color }}
-                  >
-                    {data.secondaryType.names.Chinese}
-                  </label>
+                  <TypeLabel
+                    backgroundColor={data.secondaryType.color}
+                    text={data.secondaryType.names.Chinese}
+                  />
                 )}
               </div>
             </CardContent>
@@ -184,7 +181,7 @@ const PokemonDetails = () => {
               </TableHeader>
               <TableBody>
                 {Object.values(data.quickMoves).map(move => (
-                  <TableRow>
+                  <TableRow key={move.id}>
                     <TableCell className="font-medium">{move.names.English}</TableCell>
                     <TableCell className="text-right">{move.power}</TableCell>
                     <TableCell className="hidden text-right">{move.durationMs / 1000}s</TableCell>
@@ -198,7 +195,7 @@ const PokemonDetails = () => {
                   </TableRow>
                 ))}
                 {Object.values(data.eliteQuickMoves).map(move => (
-                  <TableRow>
+                  <TableRow key={move.id}>
                     <TableCell className="font-medium">{move.names.English}(elite)</TableCell>
                     <TableCell className="text-right">{move.power}</TableCell>
                     <TableCell className="hidden text-right">{move.durationMs / 1000}s</TableCell>
@@ -239,7 +236,7 @@ const PokemonDetails = () => {
                   </TableRow>
                 ))}
                 {Object.values(data.eliteCinematicMoves).map(move => (
-                  <TableRow>
+                  <TableRow key={move.id}>
                     <TableCell className="font-medium">{move.names.English}(elite)</TableCell>
                     <TableCell className="text-right">{move.power}</TableCell>
                     <TableCell className="hidden text-right">{move.durationMs / 1000}s</TableCell>

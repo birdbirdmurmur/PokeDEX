@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PokemonDataProps } from '@/types';
+import TypeLabel from './TypeLabel';
 
 type SingleCardProps = {
   data: PokemonDataProps;
@@ -18,19 +19,15 @@ const SingleCard = ({ data }: SingleCardProps) => {
           </div>
           {/* Type */}
           <div className="flex-center sm:flex-start gap-1 font-bold text-white text-xs sm:text-sm w-full">
-            <label
-              className="px-2 py-1 rounded-xl"
-              style={{ backgroundColor: data.primaryType.color }}
-            >
-              {data.primaryType.names.Chinese}
-            </label>
+            <TypeLabel
+              backgroundColor={data.primaryType.color}
+              text={data.primaryType.names.Chinese}
+            />
             {data.secondaryType && (
-              <label
-                className="px-2 py-1 rounded-xl"
-                style={{ backgroundColor: data.secondaryType.color }}
-              >
-                {data.secondaryType.names.Chinese}
-              </label>
+              <TypeLabel
+                backgroundColor={data.secondaryType.color}
+                text={data.secondaryType.names.Chinese}
+              />
             )}
           </div>
         </div>

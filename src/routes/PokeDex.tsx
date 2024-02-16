@@ -8,7 +8,6 @@ import FilterButtons from '@/components/common/FilterButtons';
 import { useDataContext } from '@/context/useContext';
 import { PokemonDataProps } from '@/types';
 import { PokeDexPagination } from '@/components/common/PokeDexPagination';
-import { Button } from '@/components/ui/button';
 
 const PokeDex = () => {
   const { filteredData, searchTerm, setSearchTerm, handleTypeClick, handleGenerationClick } =
