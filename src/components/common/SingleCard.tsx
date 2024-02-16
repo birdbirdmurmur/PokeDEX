@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { PokemonDataProps } from '@/types';
-import TypeLabel from './TypeLabel';
+import { TypeLabel } from '@/components/common/TypeLabel';
 
 type SingleCardProps = {
   data: PokemonDataProps;

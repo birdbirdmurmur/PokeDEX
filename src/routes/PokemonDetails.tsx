@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table';
 
 import Loader from '@/components/common/Loader';
-import TypeLabel from '@/components/common/TypeLabel';
+import { TypeLabel } from '@/components/common/TypeLabel';
 
 const PokemonDetails = () => {
   const { id } = useParams();
@@ -87,11 +87,11 @@ const PokemonDetails = () => {
                       <div className="h-2 border bg-slate-300 rounded-xl">
                         <div
                           className="h-2 bg-red-500 rounded-xl"
-                          style={{ width: `${(data.stats.attack / 500) * 100}%` }}
+                          style={{ width: `${(data.stats?.attack / 500) * 100}%` }}
                         ></div>
                       </div>
                     </TableCell>
-                    <TableCell className="p-0">{data.stats.attack}</TableCell>
+                    <TableCell className="p-0">{data.stats?.attack}</TableCell>
                   </TableRow>
                   {/* Defense */}
                   <TableRow className="flex-between border-none">
@@ -100,11 +100,11 @@ const PokemonDetails = () => {
                       <div className="h-2 border bg-slate-300 rounded-xl">
                         <div
                           className="h-2 bg-green-500 rounded-xl"
-                          style={{ width: `${(data.stats.defense / 500) * 100}%` }}
+                          style={{ width: `${(data.stats?.defense / 500) * 100}%` }}
                         ></div>
                       </div>
                     </TableCell>
-                    <TableCell className="p-0">{data.stats.defense}</TableCell>
+                    <TableCell className="p-0">{data.stats?.defense}</TableCell>
                   </TableRow>
                   {/* HP */}
                   <TableRow className="flex-between border-none">
@@ -113,11 +113,11 @@ const PokemonDetails = () => {
                       <div className="h-2 border bg-slate-300 rounded-xl">
                         <div
                           className="h-2 bg-sky-500 rounded-xl"
-                          style={{ width: `${(data.stats.stamina / 500) * 100}%` }}
+                          style={{ width: `${(data.stats?.stamina / 500) * 100}%` }}
                         ></div>
                       </div>
                     </TableCell>
-                    <TableCell className="p-0">{data.stats.stamina}</TableCell>
+                    <TableCell className="p-0">{data.stats?.stamina}</TableCell>
                   </TableRow>
                 </TableBody>
               </Table>

@@ -30,10 +30,7 @@ export const PokeDexPagination = ({ currentPage, totalPages, onPageChange }: Pag
         {/* Previous */}
         {currentPage > 1 && (
           <PaginationItem>
-            <PaginationPrevious
-              href={`#${currentPage - 1}`}
-              onClick={() => handlePageClick(currentPage - 1)}
-            />
+            <PaginationPrevious href="#" onClick={() => handlePageClick(currentPage - 1)} />
           </PaginationItem>
         )}
         {/* Ellipsis */}
@@ -46,7 +43,7 @@ export const PokeDexPagination = ({ currentPage, totalPages, onPageChange }: Pag
         {Array.from({ length: endPage - startPage + 1 }, (_, index) => (
           <PaginationItem key={startPage + index}>
             <PaginationLink
-              href={`#${startPage + index}`}
+              href="#"
               onClick={() => handlePageClick(startPage + index)}
               isActive={startPage + index === currentPage}
             >
@@ -64,10 +61,7 @@ export const PokeDexPagination = ({ currentPage, totalPages, onPageChange }: Pag
         {/* Next */}
         {currentPage < totalPages && (
           <PaginationItem>
-            <PaginationNext
-              href={`#${currentPage + 1}`}
-              onClick={() => handlePageClick(currentPage + 1)}
-            />
+            <PaginationNext href="#" onClick={() => handlePageClick(currentPage + 1)} />
           </PaginationItem>
         )}
       </PaginationContent>

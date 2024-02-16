@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Input } from '@/components/ui/input';
 import SingleCard from '@/components/common/SingleCard';
@@ -8,11 +8,17 @@ import FilterButtons from '@/components/common/FilterButtons';
 import { useDataContext } from '@/context/useContext';
 import { PokemonDataProps } from '@/types';
 import { PokeDexPagination } from '@/components/common/PokeDexPagination';
+import { Button } from '@/components/ui/button';
+import TableViewer from '@/components/common/TableViewer';
 
 const PokeDex = () => {
   const { filteredData, searchTerm, setSearchTerm, handleTypeClick, handleGenerationClick } =
     useDataContext();
-  const [currentPage, setCurrentPage] = useState(1); // 當前頁面
+  const [currentPage, setCurrentPage] = useState(1);
+  const [viewTable, setViewTable] = useState(() => {
+    const storedView = localStorage.getItem('viewTable');
+    return storedView || 'card';
+  });
 
   const postsPerPage = 50; // per page
   const indexOfLastPost = currentPage * postsPerPage; // 當前頁面的最後一筆
@@ -24,6 +30,10 @@ const PokeDex = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => {
+    localStorage.setItem('viewTable', viewTable);
+  }, [viewTable]);
 
   // if (filteredData.length === 0) return <Loader />;
 
@@ -42,14 +52,28 @@ const PokeDex = () => {
         handleTypeClick={handleTypeClick}
         handleGenerationClick={handleGenerationClick}
       />
+      {/*  */}
+      <div>
+        <Button onClick={() => setViewTable('card')} className="hover:bg-slate-200">
+          Card View
+        </Button>
+        <Button onClick={() => setViewTable('table')} className="hover:bg-slate-200">
+          Table View
+        </Button>
+      </div>
       {/* All pokemon list */}
       <div className="flex-center flex-col w-full">
-        <div className="grid grid-cols-3 gap-2 w-full sm:w-3/4 mx-2">
-          {/* Single Card */}
-          {currentPosts.map((data: PokemonDataProps) => (
-            <SingleCard key={data.id} data={data} />
-          ))}
-        </div>
+        {/* View */}
+        {viewTable === 'card' ? (
+          <div className="grid grid-cols-3 gap-2 w-full sm:w-3/4 mx-2">
+            {/* Single Card */}
+            {currentPosts.map((data: PokemonDataProps) => (
+              <SingleCard key={data.id} data={data} />
+            ))}
+          </div>
+        ) : (
+          <TableViewer currentPosts={currentPosts} />
+        )}
         {/* Pagination */}
         <PokeDexPagination
           currentPage={currentPage}
