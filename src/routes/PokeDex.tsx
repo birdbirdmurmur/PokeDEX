@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Input } from '@/components/ui/input';
 import SingleCard from '@/components/common/SingleCard';
 import FilterButtons from '@/components/common/FilterButtons';
@@ -5,10 +7,24 @@ import FilterButtons from '@/components/common/FilterButtons';
 
 import { useDataContext } from '@/context/useContext';
 import { PokemonDataProps } from '@/types';
+import { PokeDexPagination } from '@/components/common/PokeDexPagination';
+import { Button } from '@/components/ui/button';
 
 const PokeDex = () => {
   const { filteredData, searchTerm, setSearchTerm, handleTypeClick, handleGenerationClick } =
     useDataContext();
+  const [currentPage, setCurrentPage] = useState(1); // 當前頁面
+
+  const postsPerPage = 50; // per page
+  const indexOfLastPost = currentPage * postsPerPage; // 當前頁面的最後一筆
+  const indexOfFirstPost = indexOfLastPost - postsPerPage; // 當前頁面的第一筆
+
+  const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredData.length / postsPerPage);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   // if (filteredData.length === 0) return <Loader />;
 
@@ -28,13 +44,19 @@ const PokeDex = () => {
         handleGenerationClick={handleGenerationClick}
       />
       {/* All pokemon list */}
-      <div className="flex-center w-full">
+      <div className="flex-center flex-col w-full">
         <div className="grid grid-cols-3 gap-2 w-full sm:w-3/4 mx-2">
           {/* Single Card */}
-          {filteredData.map((data: PokemonDataProps) => (
+          {currentPosts.map((data: PokemonDataProps) => (
             <SingleCard key={data.id} data={data} />
           ))}
         </div>
+        {/* Pagination */}
+        <PokeDexPagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

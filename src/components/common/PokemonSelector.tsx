@@ -14,11 +14,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useDataContext } from '@/context/useContext';
 
 export const PokemonSelector = () => {
-  const { filteredData } = useDataContext();
+  const { originalData } = useDataContext();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState('');
 
-  const stats = filteredData.find(pokemon => pokemon.names.Chinese === value)?.stats;
+  const stats = originalData.find(pokemon => pokemon.names.Chinese === value)?.stats;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -32,7 +32,7 @@ export const PokemonSelector = () => {
           <div className="text-center w-full">
             {value
               ? `No.${
-                  filteredData.find(pokemon => pokemon.names.Chinese === value)?.dexNr
+                  originalData.find(pokemon => pokemon.names.Chinese === value)?.dexNr
                 } ${value}`
               : 'Select Pokemon...'}
           </div>
@@ -44,7 +44,7 @@ export const PokemonSelector = () => {
           <CommandInput placeholder="Search Pokemon..." />
           <CommandEmpty>No Pokemon found.</CommandEmpty>
           <CommandGroup className="max-h-[640px] overflow-y-auto">
-            {filteredData.map(pokemon => (
+            {originalData.map(pokemon => (
               <CommandItem
                 key={pokemon.dexNr}
                 value={pokemon.names.Chinese}

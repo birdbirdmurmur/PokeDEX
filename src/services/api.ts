@@ -4,8 +4,8 @@ import { PokemonDataProps } from '@/types';
 
 const BASE_URL = 'https://pokemon-go-api.github.io/pokemon-go-api/api/';
 const URLS = {
-  AllPokemon: BASE_URL + 'pokedex.json',
-  RaidBosses: BASE_URL + 'raidboss.json',
+  AllPokemon: `${BASE_URL}pokedex.json`,
+  RaidBosses: `${BASE_URL}raidboss.json`,
 };
 
 export const getAllPokemonData = async () => {

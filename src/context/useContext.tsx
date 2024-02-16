@@ -6,6 +6,7 @@ import { usePokemonData } from '@/lib/queries/queries';
 import Loader from '@/components/common/Loader';
 
 type DataContextProps = {
+  originalData: PokemonDataProps[];
   filteredData: PokemonDataProps[];
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
@@ -14,6 +15,7 @@ type DataContextProps = {
 };
 
 const DataContext = createContext<DataContextProps>({
+  originalData: [],
   filteredData: [],
   searchTerm: '',
   setSearchTerm: () => {},
@@ -24,40 +26,43 @@ const DataContext = createContext<DataContextProps>({
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const { data: allPokemonData, isSuccess, isLoading } = usePokemonData();
 
+  const [originalData, setOriginalData] = useState<PokemonDataProps[]>([]);
   const [filteredData, setFilteredData] = useState<PokemonDataProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const debouncedSearch = useDebounce(searchTerm, 500);
 
-  // 當searchTerm改變時，篩選資料
+  // 當成功載入資料時，設定pokemonData
   useEffect(() => {
     if (isSuccess) {
-      const filteredData = allPokemonData.filter(
-        pokemon =>
-          pokemon.names.English.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-          pokemon.names.Chinese.toLowerCase().includes(debouncedSearch.toLowerCase()),
-      );
-      setFilteredData(filteredData);
+      setOriginalData(allPokemonData);
+      setFilteredData(allPokemonData);
     }
-  }, [isSuccess, debouncedSearch]);
+  }, [isSuccess]);
+
+  // 當searchTerm改變時，篩選資料
+  useEffect(() => {
+    const filteredData = originalData.filter(
+      pokemon =>
+        pokemon.names.English.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        pokemon.names.Chinese.toLowerCase().includes(debouncedSearch.toLowerCase()),
+    );
+    setFilteredData(filteredData);
+  }, [originalData, debouncedSearch]);
 
   // =========Handle Function
   const handleTypeClick = (type: string) => {
-    if (allPokemonData) {
-      setFilteredData(
-        allPokemonData.filter(
-          pokemon =>
-            pokemon.primaryType.names.Chinese === type ||
-            pokemon.secondaryType?.names.Chinese === type,
-        ),
-      );
-    }
+    setFilteredData(
+      originalData.filter(
+        pokemon =>
+          pokemon.primaryType.names.Chinese === type ||
+          pokemon.secondaryType?.names.Chinese === type,
+      ),
+    );
   };
 
   const handleGenerationClick = (generation: string) => {
-    if (allPokemonData) {
-      setFilteredData(allPokemonData.filter(pokemon => pokemon.generation === generation));
-    }
+    setFilteredData(originalData.filter(pokemon => pokemon.generation === generation));
   };
   // =========Handle Function
 
@@ -66,6 +71,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   const value = {
+    originalData,
     filteredData,
     searchTerm,
     setSearchTerm,
