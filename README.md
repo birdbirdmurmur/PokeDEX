@@ -2,6 +2,7 @@
 
 這是一個寶可夢圖鑑的專案練習。
 練習 react Hooks、串接第三方 api。
+![image](https://github.com/birdbirdmurmur/PokeDEX/blob/main/public/preview.png)
 
 ### Environment
 
