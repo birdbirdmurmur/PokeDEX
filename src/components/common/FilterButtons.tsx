@@ -1,3 +1,5 @@
+import { useDataContext } from '@/context/useContext';
+
 import {
   Menubar,
   MenubarContent,
@@ -8,15 +10,22 @@ import {
 
 import { allGeneration, allTypes } from '@/constants/data';
 
-type FilterButtonsProps = {
-  handleTypeClick: (type: string) => void;
-  handleGenerationClick: (generation: string) => void;
-};
+const FilterButtons = () => {
+  const { handleTypeClick, handleGenerationClick, handleResetClick } = useDataContext();
 
-const FilterButtons = ({ handleTypeClick, handleGenerationClick }: FilterButtonsProps) => {
   return (
-    <div className="flex-center gap-4">
+    <div className="flex-center flex-1 gap-4">
+      {/* Filter */}
       <Menubar className="flex-center gap-1 text-center border-slate-200 text-slate-700 shadow-sm rounded-xl my-2">
+        {/* Reset All */}
+        <MenubarMenu>
+          <MenubarTrigger
+            className="cursor-pointer rounded-xl hover:bg-slate-200 transition ease-in-out duration-300"
+            onClick={handleResetClick}
+          >
+            All
+          </MenubarTrigger>
+        </MenubarMenu>
         {/* Type */}
         <MenubarMenu>
           <MenubarTrigger className="cursor-pointer rounded-xl hover:bg-slate-200 transition ease-in-out duration-300">

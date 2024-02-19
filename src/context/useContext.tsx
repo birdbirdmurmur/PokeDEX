@@ -8,19 +8,29 @@ import Loader from '@/components/common/Loader';
 type DataContextProps = {
   originalData: PokemonDataProps[];
   filteredData: PokemonDataProps[];
+  currentPosts: PokemonDataProps[];
+  currentPage: number;
+  totalPages: number;
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
   handleTypeClick: (type: string) => void;
   handleGenerationClick: (generation: string) => void;
+  handleResetClick: () => void;
+  handlePageChange: (page: number) => void;
 };
 
 const DataContext = createContext<DataContextProps>({
   originalData: [],
   filteredData: [],
+  currentPosts: [],
+  currentPage: 1,
+  totalPages: 1,
   searchTerm: '',
   setSearchTerm: () => {},
   handleTypeClick: () => {},
   handleGenerationClick: () => {},
+  handleResetClick: () => {},
+  handlePageChange: () => {},
 });
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
@@ -29,6 +39,14 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [originalData, setOriginalData] = useState<PokemonDataProps[]>([]);
   const [filteredData, setFilteredData] = useState<PokemonDataProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const postsPerPage = 50; // per page
+  const indexOfLastPost = currentPage * postsPerPage; // 當前頁面的最後一筆
+  const indexOfFirstPost = indexOfLastPost - postsPerPage; // 當前頁面的第一筆
+
+  const currentPosts = filteredData.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.ceil(filteredData.length / postsPerPage);
 
   const debouncedSearch = useDebounce(searchTerm, 500);
 
@@ -52,6 +70,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
   // =========Handle Function
   const handleTypeClick = (type: string) => {
+    setCurrentPage(1);
     setFilteredData(
       originalData.filter(
         pokemon =>
@@ -62,8 +81,20 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const handleGenerationClick = (generation: string) => {
+    setCurrentPage(1);
     setFilteredData(originalData.filter(pokemon => pokemon.generation === generation));
   };
+
+  const handleResetClick = () => {
+    setCurrentPage(1);
+    setFilteredData(originalData);
+    setSearchTerm('');
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   // =========Handle Function
 
   if (isLoading) {
@@ -73,10 +104,15 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const value = {
     originalData,
     filteredData,
+    currentPosts,
+    currentPage,
+    totalPages,
     searchTerm,
     setSearchTerm,
     handleTypeClick,
     handleGenerationClick,
+    handleResetClick,
+    handlePageChange,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

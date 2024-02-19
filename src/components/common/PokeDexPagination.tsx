@@ -1,3 +1,5 @@
+import { useDataContext } from '@/context/useContext';
+
 import {
   Pagination,
   PaginationContent,
@@ -8,16 +10,12 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 
-type PaginationProps = {
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-};
+const PokeDexPagination = () => {
+  const { currentPage, totalPages, handlePageChange } = useDataContext();
 
-export const PokeDexPagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {
   const handlePageClick = (page: number) => {
     if (page < 1 || page > totalPages) return;
-    onPageChange(page);
+    handlePageChange(page);
   };
 
   const maxDisplayedPages = 5; // max pages to display
@@ -68,3 +66,5 @@ export const PokeDexPagination = ({ currentPage, totalPages, onPageChange }: Pag
     </Pagination>
   );
 };
+
+export default PokeDexPagination;

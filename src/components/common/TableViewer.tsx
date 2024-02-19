@@ -1,3 +1,7 @@
+import { Link } from 'react-router-dom';
+import { useDataContext } from '@/context/useContext';
+
+import { TypeLabel } from '@/components/common/TypeLabel';
 import {
   Table,
   TableBody,
@@ -6,11 +10,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { TypeLabel } from '@/components/common/TypeLabel';
-import { PokemonDataProps } from '@/types';
-import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
 
-const TableViewer = ({ currentPosts }: { currentPosts: PokemonDataProps[] }) => {
+import { PokemonDataProps } from '@/types';
+
+const TableViewer = () => {
+  const { currentPosts } = useDataContext();
+
   return (
     <Table>
       <TableHeader>
@@ -60,7 +67,12 @@ const TableViewer = ({ currentPosts }: { currentPosts: PokemonDataProps[] }) => 
             <TableCell className="text-red-700">{data.stats?.attack}</TableCell>
             <TableCell className="text-green-700">{data.stats?.defense}</TableCell>
             <TableCell className="text-sky-700">{data.stats?.stamina}</TableCell>
-            <TableCell>☆</TableCell>
+            <TableCell>
+              <Button className="flex-center w-full h-full">
+                <FaRegBookmark />
+                {/* <FaBookmark /> */}
+              </Button>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
