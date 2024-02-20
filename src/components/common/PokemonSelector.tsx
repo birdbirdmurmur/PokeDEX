@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDataContext } from '@/context/useContext';
 import { Check, ChevronsUpDown } from 'lucide-react';
 
 import { calculateCP, cn } from '@/lib/utils';
@@ -11,7 +12,6 @@ import {
   CommandItem,
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { useDataContext } from '@/context/useContext';
 
 export const PokemonSelector = () => {
   const { originalData } = useDataContext();

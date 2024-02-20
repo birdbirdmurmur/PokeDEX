@@ -155,3 +155,8 @@ export type IVsProps = {
   defense: number;
   hp: number;
 };
+
+export type markedItemsProps = {
+  dexNr: number;
+  formId: string;
+};

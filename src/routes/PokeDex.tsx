@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useDataContext } from '@/context/useContext';
 
 import FilterButtons from '@/components/common/FilterButtons';
@@ -10,16 +9,7 @@ import { Button } from '@/components/ui/button';
 import { FaTh, FaTable } from 'react-icons/fa';
 
 const PokeDex = () => {
-  const { searchTerm, setSearchTerm } = useDataContext();
-
-  const [viewTable, setViewTable] = useState(() => {
-    const storedView = localStorage.getItem('viewTable');
-    return storedView || 'card';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('viewTable', viewTable);
-  }, [viewTable]);
+  const { searchTerm, setSearchTerm, viewTable, handleViewClick } = useDataContext();
 
   return (
     <div className="flex-start flex-col max-container w-full gap-2 py-4">
@@ -37,10 +27,10 @@ const PokeDex = () => {
         <FilterButtons />
         {/* Toggle View */}
         <div className="flex justify-end flex-1 gap-0">
-          <Button onClick={() => setViewTable('card')} className="rounded hover:bg-slate-200">
+          <Button onClick={() => handleViewClick('card')} className="rounded hover:bg-slate-200">
             <FaTh /> Card
           </Button>
-          <Button onClick={() => setViewTable('table')} className="rounded hover:bg-slate-200">
+          <Button onClick={() => handleViewClick('table')} className="rounded hover:bg-slate-200">
             <FaTable />
             Table
           </Button>

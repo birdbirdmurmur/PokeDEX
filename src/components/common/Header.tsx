@@ -29,6 +29,9 @@ const Header = () => {
               <NavLink to="/calculator">Calculator</NavLink>
             </li>
             <li className="base-medium hover:text-sky-500">
+              <NavLink to="/saved">Saved</NavLink>
+            </li>
+            <li className="base-medium hover:text-sky-500">
               <NavLink to="/about">About</NavLink>
             </li>
           </ul>
@@ -56,6 +59,9 @@ const Header = () => {
                 </li>
                 <li className="base-medium hover:text-sky-700">
                   <NavLink to="/calculator">Calculator</NavLink>
+                </li>
+                <li className="base-medium hover:text-sky-700">
+                  <NavLink to="/saved">Saved</NavLink>
                 </li>
                 <li className="base-medium hover:text-sky-700">
                   <NavLink to="/about">About</NavLink>

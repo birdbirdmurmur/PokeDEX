@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, SetStateAction, Dispatch } from 'react';
 
-import { PokemonDataProps } from '@/types';
+import { PokemonDataProps, markedItemsProps } from '@/types';
 import useDebounce from '@/hooks/useDebounce';
 import { usePokemonData } from '@/lib/queries/queries';
 import Loader from '@/components/common/Loader';
@@ -11,12 +11,16 @@ type DataContextProps = {
   currentPosts: PokemonDataProps[];
   currentPage: number;
   totalPages: number;
+  markedItems: markedItemsProps[];
+  viewTable: string;
   searchTerm: string;
   setSearchTerm: Dispatch<SetStateAction<string>>;
   handleTypeClick: (type: string) => void;
   handleGenerationClick: (generation: string) => void;
   handleResetClick: () => void;
   handlePageChange: (page: number) => void;
+  handleBookmarkClick: (dexNr: number, formId: string) => void;
+  handleViewClick: (view: string) => void;
 };
 
 const DataContext = createContext<DataContextProps>({
@@ -25,12 +29,16 @@ const DataContext = createContext<DataContextProps>({
   currentPosts: [],
   currentPage: 1,
   totalPages: 1,
+  markedItems: [],
+  viewTable: 'card',
   searchTerm: '',
   setSearchTerm: () => {},
   handleTypeClick: () => {},
   handleGenerationClick: () => {},
   handleResetClick: () => {},
   handlePageChange: () => {},
+  handleBookmarkClick: () => {},
+  handleViewClick: () => {},
 });
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
@@ -40,8 +48,16 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [filteredData, setFilteredData] = useState<PokemonDataProps[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [markedItems, setMarkedItems] = useState<markedItemsProps[]>(() => {
+    const storedItems = localStorage.getItem('markedItems');
+    return storedItems ? JSON.parse(storedItems) : [];
+  });
+  const [viewTable, setViewTable] = useState(() => {
+    const storedView = localStorage.getItem('viewTable');
+    return storedView || 'card';
+  });
 
-  const postsPerPage = 50; // per page
+  const postsPerPage = 50; // 每頁顯示資料筆數
   const indexOfLastPost = currentPage * postsPerPage; // 當前頁面的最後一筆
   const indexOfFirstPost = indexOfLastPost - postsPerPage; // 當前頁面的第一筆
 
@@ -50,7 +66,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
   const debouncedSearch = useDebounce(searchTerm, 500);
 
-  // 當成功載入資料時，設定pokemonData
+  useEffect(() => {
+    localStorage.setItem('markedItems', JSON.stringify(markedItems));
+  }, [markedItems]);
+
   useEffect(() => {
     if (isSuccess) {
       setOriginalData(allPokemonData);
@@ -58,7 +77,6 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [isSuccess]);
 
-  // 當searchTerm改變時，篩選資料
   useEffect(() => {
     const filteredData = originalData.filter(
       pokemon =>
@@ -67,6 +85,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     );
     setFilteredData(filteredData);
   }, [originalData, debouncedSearch]);
+
+  useEffect(() => {
+    localStorage.setItem('viewTable', viewTable);
+  }, [viewTable]);
 
   // =========Handle Function
   const handleTypeClick = (type: string) => {
@@ -95,6 +117,21 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentPage(page);
   };
 
+  const handleBookmarkClick = (dexNr: number, formId: string) => {
+    setMarkedItems(prevItems => {
+      const isMarked = prevItems.some(item => item.dexNr === dexNr);
+      if (isMarked) {
+        return prevItems.filter(item => item.dexNr !== dexNr);
+      } else {
+        return [...prevItems, { dexNr, formId }];
+      }
+    });
+  };
+
+  const handleViewClick = (view: string) => {
+    setViewTable(view);
+  };
+
   // =========Handle Function
 
   if (isLoading) {
@@ -107,12 +144,16 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     currentPosts,
     currentPage,
     totalPages,
+    markedItems,
+    viewTable,
     searchTerm,
     setSearchTerm,
     handleTypeClick,
     handleGenerationClick,
     handleResetClick,
     handlePageChange,
+    handleBookmarkClick,
+    handleViewClick,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

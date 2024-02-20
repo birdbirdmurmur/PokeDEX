@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDataContext } from '@/context/useContext';
 
@@ -16,7 +17,7 @@ import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import { PokemonDataProps } from '@/types';
 
 const TableViewer = () => {
-  const { currentPosts } = useDataContext();
+  const { currentPosts, markedItems, handleBookmarkClick } = useDataContext();
 
   return (
     <Table>
@@ -68,9 +69,15 @@ const TableViewer = () => {
             <TableCell className="text-green-700">{data.stats?.defense}</TableCell>
             <TableCell className="text-sky-700">{data.stats?.stamina}</TableCell>
             <TableCell>
-              <Button className="flex-center w-full h-full">
-                <FaRegBookmark />
-                {/* <FaBookmark /> */}
+              <Button
+                className="flex-center w-full h-full"
+                onClick={() => handleBookmarkClick(data.dexNr, data.formId)}
+              >
+                {markedItems.some(item => item.dexNr === data.dexNr) ? (
+                  <FaBookmark />
+                ) : (
+                  <FaRegBookmark />
+                )}
               </Button>
             </TableCell>
           </TableRow>

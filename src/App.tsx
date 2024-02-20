@@ -4,6 +4,7 @@ import Root from '@/routes/Root';
 import About from '@/routes/About';
 import PokeDex from '@/routes/PokeDex';
 import Calculator from '@/routes/Calculator';
+import Saved from '@/routes/Saved';
 
 import './globals.css';
 import PokemonDetails from './routes/PokemonDetails';
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/calculator" element={<Calculator />} />
           <Route path="/pokemon/:id" element={<PokemonDetails />} />
+          <Route path="/saved" element={<Saved />} />
         </Route>
       </Routes>
     </main>
